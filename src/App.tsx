@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 
-import './App.css'
 import { postsActions } from './redux/posts/posts.actions'
 
 const App: React.FC = () => {

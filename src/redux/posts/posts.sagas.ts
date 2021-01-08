@@ -1,5 +1,5 @@
-import { signUpRequest, signInRequest } from './../../api/api'
-import { authActions } from './posts.actions'
+import { postsRequest, usersRequest } from './../../api/api'
+import { postsActions } from './posts.actions'
 
 import { takeLatest, all, put } from 'redux-saga/effects'
 
@@ -7,25 +7,33 @@ import * as Effects from 'redux-saga/effects'
 
 const call: any = Effects.call
 
-export function* signUp(action: TAuthActionsWithPayload) {
-  const { login, password, avatar } = action.payload as ILoginPasswordAvatar
+export function* fetchPosts() {
   try {
-    yield call(signUpRequest, [login, password, avatar])
-    yield put(authActions.signUpSuccess())
-    yield put(push('/sign-in'))
+    const { data } = yield call(postsRequest)
+    console.log(data)
+    yield put(postsActions.fetchPostsStart())
   } catch (error) {
-    yield put(authActions.signUpFailure(error.response.data))
+    alert(error)
+  }
+}
+export function* fetchUsers() {
+  try {
+    const { data } = yield call(usersRequest)
+    console.log(data)
+    yield put(postsActions.fetchPostsStart())
+  } catch (error) {
+    alert(error)
   }
 }
 
-export function* onSignInStart() {
-  yield takeLatest('SIGN_IN_START', signIn)
+export function* onPostsFetchStart() {
+  yield takeLatest('FETCH_USERS_START', fetchPosts)
 }
 
-export function* onSignUpStart() {
-  yield takeLatest('SIGN_UP_START', signUp)
+export function* onPostsUsersStart() {
+  yield takeLatest('FETCH_POSTS_START', fetchUsers)
 }
 
-export function* authSagas() {
-  yield all([call(onSignInStart), call(onSignUpStart)])
+export function* postsSagas() {
+  yield all([call(onPostsFetchStart), call(onPostsUsersStart)])
 }

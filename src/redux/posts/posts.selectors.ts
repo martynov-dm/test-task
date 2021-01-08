@@ -1,4 +1,4 @@
-import { AppStateType } from '../store'
+import { AppStateType } from '../root-reducer'
 import { createSelector } from 'reselect'
 
-const selectAuth = (state: AppStateType) => state.auth
+const selectPosts = (state: AppStateType) => state.posts
