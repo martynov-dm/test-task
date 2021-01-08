@@ -3,3 +3,14 @@ export type InferActionTypes<T> = T extends {
 }
   ? U
   : never
+
+export interface IPost {
+  userId: number
+  id: number
+  title: string
+  body: string
+}
+export interface IUser {
+  id: number
+  name: string
+}

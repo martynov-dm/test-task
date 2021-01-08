@@ -1,18 +1,15 @@
-import { AuthActionTypes } from './posts.actions'
+import { IPost, IUser } from './../../types/types'
+import { PostsActionTypes } from './posts.actions'
 
 const INITIAL_STATE = {
-  userData: {
-    login: '',
-    avatar: '',
-    id: '',
+  userData: [] as IUser[],
+  postsData: [] as IPost[],
+
+  postsFetch: {
+    status: 'idle' as 'idle' | 'loading' | 'succeeded',
   },
-  signUpRequest: {
-    status: 'idle' as 'idle' | 'loading' | 'succeeded' | 'failed',
-    error: null as string | null,
-  },
-  signInRequest: {
-    status: 'idle' as 'idle' | 'loading' | 'succeeded' | 'failed',
-    error: null as string | null,
+  usersFetch: {
+    status: 'idle' as 'idle' | 'loading' | 'succeeded',
   },
 }
 
@@ -20,74 +17,32 @@ export type InitialStateType = typeof INITIAL_STATE
 
 const postsReducer = (
   state = INITIAL_STATE,
-  action: AuthActionTypes
+  action: PostsActionTypes
 ): InitialStateType => {
   switch (action.type) {
-    case 'SIGN_UP_START':
+    case 'FETCH_USERS_START':
       return {
         ...state,
-        signUpRequest: { ...state.signUpRequest, status: 'loading' },
+        usersFetch: { status: 'loading' },
       }
-    case 'SIGN_UP_SUCCESS':
+    case 'FETCH_USERS_SUCCESS':
       return {
         ...state,
-        signUpRequest: { ...state.signUpRequest, status: 'succeeded' },
+        usersFetch: { status: 'succeeded' },
+        userData: action.payload,
       }
-    case 'SIGN_UP_FAILURE':
+    case 'FETCH_POSTS_START':
       return {
         ...state,
-        signUpRequest: {
-          ...state.signUpRequest,
-          status: 'failed',
-          error: action.payload,
-        },
+        postsFetch: { status: 'loading' },
       }
-    case 'SIGN_UP_CLEAR':
+    case 'FETCH_POSTS_SUCCESS':
       return {
         ...state,
-        signUpRequest: {
-          ...state.signUpRequest,
-          status: 'idle',
-          error: null,
-        },
+        postsFetch: { status: 'succeeded' },
+        postsData: action.payload,
       }
-    case 'SIGN_IN_START':
-      return {
-        ...state,
-        signInRequest: { ...state.signInRequest, status: 'loading' },
-      }
-    case 'SIGN_IN_SUCCESS':
-      return {
-        ...state,
-        signInRequest: { ...state.signInRequest, status: 'succeeded' },
-      }
-    case 'SIGN_IN_FAILURE':
-      return {
-        ...state,
-        signInRequest: {
-          ...state.signInRequest,
-          status: 'failed',
-          error: action.payload,
-        },
-      }
-    case 'SIGN_IN_CLEAR':
-      return {
-        ...state,
-        signInRequest: {
-          ...state.signInRequest,
-          status: 'idle',
-          error: null,
-        },
-      }
-    case 'ADD_USER_DATA':
-      return {
-        ...state,
-        userData: {
-          login: action.payload.login,
-          avatar: action.payload.avatar,
-          id: action.payload._id,
-        },
-      }
+
     default:
       return state
   }

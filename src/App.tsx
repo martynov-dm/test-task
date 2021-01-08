@@ -2,11 +2,15 @@ import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 
 import './App.css'
+import { postsActions } from './redux/posts/posts.actions'
 
 const App: React.FC = () => {
   const dispatch = useDispatch()
 
-  useEffect(() => {}, [])
+  useEffect(() => {
+    dispatch(postsActions.fetchPostsStart())
+    dispatch(postsActions.fetchUsersStart())
+  }, [dispatch])
 
   return <div className='App'> dick</div>
 }
